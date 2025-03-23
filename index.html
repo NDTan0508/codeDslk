@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 1500px;
+        }
+
+        .section {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            border-radius: 10px;
+            border: 1px solid #1d0dfc;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.281);
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        button {
+            background: #1e90ff;
+            color: rgb(255, 255, 255);
+            border: 1px solid rgb(0, 0, 0);
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .list-container,
+        .queue-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            /* Không cho xuống hàng */
+            overflow-x: auto;
+            /* Thêm thanh cuộn ngang nếu danh sách quá dài */
+            gap: 10px;
+            padding: 10px;
+            white-space: nowrap;
+        }
+
+        .node {
+            padding: 10px;
+            border-radius: 5px;
+            background: #ff4757;
+            color: white;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            display: inline-block;
+            /* Đảm bảo các node nằm ngang */
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+            background-color: #45a049;
+        }
+
+        .stack-container {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .stack-container .node {
+            margin: 5px 0;
+        }
+
+        .queue-container {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="section">
+            <h1>Danh sách liên kết đơn</h1>
+            <input type="number" id="sllNodeList" placeholder="Nhập danh sách">
+            <button onclick="sllInitializeList()">Khởi tạo</button>
+            <br><br>
+            <input type="number" id="sllNodeValue" placeholder="Nhập giá trị">
+            <input type="number" id="sllNodePosition" placeholder="Nhập vị trí">
+            <br><br>
+            <button onclick="sllInsertNode()">Chèn</button>
+            <button onclick="sllDeleteNodeByValue()">Xóa giá trị</button>
+            <button onclick="sllDeleteNodeByPosition()">Xóa vị trí</button>
+            <button onclick="sllCountNodes()">Đếm</button>
+            <div class="list-container" id="sllListDisplay"></div>
+            <p id="sllNodeCount"></p>
+            <button onclick="resetSinglyList()">Reset</button>
+        </div>
+        <div class="section">
+            <h1>Danh sách liên kết kép</h1>
+            <input type="number" id="dllNodeList" placeholder="Nhập danh sách">
+            <button onclick="initializeDoublyList()">Khởi tạo</button>
+            <br><br>
+            <input type="number" id="dllNodeValue" placeholder="Nhập giá trị">
+            <input type="number" id="dllNodePosition" placeholder="Nhập vị trí">
+            <br><br>
+            <button onclick="insertDoublyNode()">Chèn</button>
+            <button onclick="deleteDoublyNodeByValue()">Xóa giá trị</button>
+            <button onclick="deleteDoublyNodeByPosition()">Xóa vị trí</button>
+            <button onclick="countDoublyNodes()">Đếm</button>
+            <div class="list-container" id="dllListDisplay"></div>
+            <p id="dllNodeCount"></p>
+            <button onclick="resetDoublyList()">Reset</button>
+        </div>
+        <div class="section">
+            <h1>Stack</h1>
+            <input type="number" id="stackValue" placeholder="Nhập giá trị">
+            <br><br>
+            <button onclick="pushStack()">Push</button>
+            <button onclick="popStack()">Pop</button>
+            <button onclick="countStack()">Đếm</button>
+            <br><br>
+            <div class="stack-container" id="stackDisplay"></div>
+            <p id="stackCount"></p>
+            <button onclick="resetStack()">Reset</button>
+        </div>
+        <div class="section">
+            <h1>Queue</h1>
+            <input type="number" id="queueValue" placeholder="Nhập giá trị">
+            <br><br>
+            <button onclick="enqueueQueue()">Enqueue</button>
+            <button onclick="dequeueQueue()">Dequeue</button>
+            <button onclick="countQueue()">Đếm</button>
+            <br><br>
+            <div class="queue-container" id="queueDisplay"></div>
+            <p id="queueCount"></p>
+            <button onclick="resetQueue()">Reset</button>
+        </div>
+    </div>
+    <script>
+        class SLLNode {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+            }
+        }
+
+        class SinglyLinkedList {
+            constructor() {
+                this.head = null;
+            }
+
+            initialize(values) {
+                this.head = null;
+                values.forEach(value => this.insert(value, -1));
+            }
+
+            insert(value, position = -1) {
+                let newNode = new SLLNode(value);
+                if (!this.head || position === 1) {
+                    newNode.next = this.head;
+                    this.head = newNode;
+                } else {
+                    let temp = this.head;
+                    let i = 1;
+                    while (temp.next && (position === -1 || i < position - 1)) {
+                        temp = temp.next;
+                        i++;
+                    }
+                    newNode.next = temp.next;
+                    temp.next = newNode;
+                }
+                this.display();
+            }
+
+            deleteByPosition(position) {
+                if (!this.head) return;
+                if (position === 1) {
+                    this.head = this.head.next;
+                } else {
+                    let temp = this.head;
+                    let i = 1;
+                    while (temp.next && i < position - 1) {
+                        temp = temp.next;
+                        i++;
+                    }
+                    if (temp.next) {
+                        temp.next = temp.next.next;
+                    }
+                }
+                this.display();
+            }
+
+            deleteByValue(value) {
+                if (!this.head) return;
+                if (this.head.value === value) {
+                    this.head = this.head.next;
+                    this.display();
+                    return;
+                }
+                let temp = this.head;
+                while (temp.next && temp.next.value !== value) {
+                    temp = temp.next;
+                }
+                if (temp.next) {
+                    temp.next = temp.next.next;
+                }
+                this.display();
+            }
+
+            count() {
+                let count = 0;
+                let temp = this.head;
+                while (temp) {
+                    count++;
+                    temp = temp.next;
+                }
+                document.getElementById("sllNodeCount").textContent = "Node Count: " + count;
+            }
+
+            display() {
+                let temp = this.head;
+                let displayDiv = document.getElementById("sllListDisplay");
+                displayDiv.innerHTML = "";
+                while (temp) {
+                    let nodeElement = document.createElement("div");
+                    nodeElement.classList.add("node");
+                    nodeElement.textContent = temp.value;
+                    displayDiv.appendChild(nodeElement);
+                    temp = temp.next;
+                }
+            }
+        }
+
+        let sll = new SinglyLinkedList();
+
+        function sllInitializeList() {
+            let values = document.getElementById("sllNodeList").value.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+            values.forEach(value => sll.insert(value, -1));
+            document.getElementById("sllNodeList").value = "";
+        }
+
+        function sllInsertNode() {
+            let value = parseInt(document.getElementById("sllNodeValue").value);
+            let position = parseInt(document.getElementById("sllNodePosition").value);
+            if (!isNaN(value)) {
+                sll.insert(value, isNaN(position) ? -1 : position);
+            }
+            document.getElementById("sllNodeValue").value = "";
+            document.getElementById("sllNodePosition").value = "";
+        }
+
+        function sllDeleteNodeByPosition() {
+            let position = parseInt(document.getElementById("sllNodePosition").value);
+            if (!isNaN(position)) {
+                sll.deleteByPosition(position);
+            }
+            document.getElementById("sllNodePosition").value = "";
+        }
+
+        function sllDeleteNodeByValue() {
+            let value = parseInt(document.getElementById("sllNodeValue").value);
+            if (!isNaN(value)) {
+                sll.deleteByValue(value);
+            }
+            document.getElementById("sllNodeValue").value = "";
+        }
+
+        function sllCountNodes() {
+            sll.count();
+        }
+        function resetSinglyList() {
+            sll.head = null; // Tạo lại danh sách rỗng
+            document.getElementById("sllListDisplay").innerHTML = "";
+            document.getElementById("sllNodeCount").textContent = "";
+        }
+
+        //dslk kep
+        class DNode {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+                this.prev = null;
+            }
+        }
+        class DoublyLinkedList {
+            constructor() {
+                this.head = null;
+            }
+
+            initialize(values) {
+                this.head = null;
+                values.forEach(value => this.insert(value, -1));
+            }
+
+            insert(value, position = -1) {
+                let newNode = new DNode(value);
+                if (!this.head || position === 1) {
+                    newNode.next = this.head;
+                    if (this.head) this.head.prev = newNode;
+                    this.head = newNode;
+                } else {
+                    let temp = this.head;
+                    let i = 1;
+                    while (temp.next && (position === -1 || i < position - 1)) {
+                        temp = temp.next;
+                        i++;
+                    }
+                    newNode.next = temp.next;
+                    newNode.prev = temp;
+                    if (temp.next) temp.next.prev = newNode;
+                    temp.next = newNode;
+                }
+                this.display();
+            }
+
+            deleteByPosition(position) {
+                if (!this.head) return;
+                let temp = this.head;
+                if (position === 1) {
+                    this.head = temp.next;
+                    if (this.head) this.head.prev = null;
+                } else {
+                    let i = 1;
+                    while (temp.next && i < position) {
+                        temp = temp.next;
+                        i++;
+                    }
+                    if (!temp) return;
+                    if (temp.prev) temp.prev.next = temp.next;
+                    if (temp.next) temp.next.prev = temp.prev;
+                }
+                this.display();
+            }
+
+            deleteByValue(value) {
+                if (!this.head) return;
+                let temp = this.head;
+                while (temp && temp.value !== value) {
+                    temp = temp.next;
+                }
+                if (!temp) return;
+                if (temp.prev) temp.prev.next = temp.next;
+                if (temp.next) temp.next.prev = temp.prev;
+                if (temp === this.head) this.head = temp.next;
+                this.display();
+            }
+
+            count() {
+                let count = 0;
+                let temp = this.head;
+                while (temp) {
+                    count++;
+                    temp = temp.next;
+                }
+                document.getElementById("dllNodeCount").textContent = "Node Count: " + count;
+            }
+
+            display() {
+                let temp = this.head;
+                let displayDiv = document.getElementById("dllListDisplay");
+                displayDiv.innerHTML = "";
+                while (temp) {
+                    let nodeElement = document.createElement("div");
+                    nodeElement.classList.add("node");
+                    nodeElement.textContent = temp.value;
+                    displayDiv.appendChild(nodeElement);
+                    temp = temp.next;
+                }
+            }
+        }
+        // Khai báo danh sách liên kết kép
+        let dlllist = new DoublyLinkedList();
+
+        function initializeDoublyList() {
+            let values = document.getElementById("dllNodeList").value.split(",").map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+            values.forEach(value => dlllist.insert(value, -1));
+            document.getElementById("dllNodeList").value = "";
+        }
+
+        function insertDoublyNode() {
+            let value = parseInt(document.getElementById("dllNodeValue").value);
+            let position = parseInt(document.getElementById("dllNodePosition").value);
+            if (!isNaN(value)) {
+                dlllist.insert(value, isNaN(position) ? -1 : position);
+            }
+            document.getElementById("dllNodeValue").value = "";
+            document.getElementById("dllNodePosition").value = "";
+        }
+
+        function deleteDoublyNodeByPosition() {
+            let position = parseInt(document.getElementById("dllNodePosition").value);
+            if (!isNaN(position)) {
+                dlllist.deleteByPosition(position);
+            }
+            document.getElementById("dllNodePosition").value = "";
+        }
+
+        function deleteDoublyNodeByValue() {
+            let value = parseInt(document.getElementById("dllNodeValue").value);
+            if (!isNaN(value)) {
+                dlllist.deleteByValue(value);
+            }
+            document.getElementById("dllNodeValue").value = "";
+        }
+
+        function countDoublyNodes() {
+            dlllist.count();
+        }
+        function resetDoublyList() {
+            dlllist.head = null; // Đặt lại đầu danh sách về null
+
+            document.getElementById("dllListDisplay").innerHTML = "";
+            document.getElementById("dllNodeCount").textContent = "";
+        }
+
+        //Stack
+        class StackNode {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+            }
+        }
+
+        class Stack {
+            constructor() {
+                this.top = null;
+            }
+
+            push(value) {
+                let newNode = new StackNode(value);
+                newNode.next = this.top;
+                this.top = newNode;
+                this.display();
+            }
+
+            pop() {
+                if (!this.top) return;
+                this.top = this.top.next;
+                this.display();
+            }
+
+            count() {
+                let count = 0;
+                let temp = this.top;
+                while (temp) {
+                    count++;
+                    temp = temp.next;
+                }
+                document.getElementById("stackCount").textContent = "Node Count: " + count;
+            }
+
+            display() {
+                let temp = this.top;
+                let displayDiv = document.getElementById("stackDisplay");
+                displayDiv.innerHTML = "";
+                while (temp) {
+                    let nodeElement = document.createElement("div");
+                    nodeElement.classList.add("node");
+                    nodeElement.textContent = temp.value;
+                    displayDiv.prepend(nodeElement);
+                    temp = temp.next;
+                }
+            }
+        }
+
+        let stack = new Stack();
+
+        function pushStack() {
+            let value = parseInt(document.getElementById("stackValue").value);
+            if (!isNaN(value)) {
+                stack.push(value);
+            }
+            document.getElementById("stackValue").value = "";
+        }
+
+        function popStack() {
+            stack.pop();
+        }
+
+        function countStack() {
+            stack.count();
+        }
+        function resetStack() {
+            stack.top = null;
+            document.getElementById("stackDisplay").innerHTML = "";
+            document.getElementById("stackCount").textContent = "";
+        }
+
+        //queue
+        class Queue {
+            constructor() {
+                this.front = null;
+                this.rear = null;
+            }
+
+            enqueue(value) {
+                let newNode = { value: value, next: null };
+                if (!this.rear) {
+                    this.front = this.rear = newNode;
+                } else {
+                    this.rear.next = newNode;
+                    this.rear = newNode;
+                }
+                this.displayQueue();
+            }
+
+            dequeue() {
+                if (!this.front) return;
+                this.front = this.front.next;
+                if (!this.front) this.rear = null;
+                this.displayQueue();
+            }
+
+            countQueue() {
+                let count = 0;
+                let temp = this.front;
+                while (temp) {
+                    count++;
+                    temp = temp.next;
+                }
+                document.getElementById("queueCount").innerText = "Số phần tử: " + count;
+            }
+
+            displayQueue() {
+                let container = document.getElementById("queueDisplay");
+                container.innerHTML = "";
+                let temp = this.front;
+                while (temp) {
+                    let nodeDiv = document.createElement("div");
+                    nodeDiv.className = "node";
+                    nodeDiv.innerText = temp.value;
+                    container.appendChild(nodeDiv);
+                    temp = temp.next;
+                }
+            }
+        }
+
+        const queue = new Queue();
+
+        function enqueueQueue() {
+            let value = document.getElementById("queueValue").value;
+            if (value !== "") {
+                queue.enqueue(parseInt(value));
+                document.getElementById("queueValue").value = "";
+            }
+        }
+
+        function dequeueQueue() {
+            queue.dequeue();
+        }
+
+        function countQueue() {
+            queue.countQueue();
+        }
+        function resetQueue() {
+            queue.front = null;  // Xóa phần tử đầu
+            queue.rear = null;   // Xóa phần tử cuối
+            document.getElementById("queueDisplay").innerHTML = ""; // Xóa giao diện
+            document.getElementById("queueCount").textContent = ""; // Cập nhật số lượng
+        }
+    </script>
+</body>
+
+</html>
